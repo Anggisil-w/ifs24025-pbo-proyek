@@ -1,9 +1,16 @@
 package org.delcom.app.entities;
 
-import jakarta.persistence.*;
-import java.time.LocalDate; // [BARU] Import LocalDate
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime; // [BARU] Import LocalDate
 import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "food_products")
