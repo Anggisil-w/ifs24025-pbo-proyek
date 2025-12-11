@@ -12,10 +12,10 @@
 	</parent>
 
 	<groupId>org.delcom</groupId>
-	<artifactId>Parking-Slot</artifactId>
+	<artifactId>Food-Products</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Parking-Slot</name>
-	<description>Monitoring Parking Slot</description>
+	<name>Food-Products</name>
+	<description>Food Quality Inspector</description>
 
 	<properties>
 		<java.version>25</java.version>
