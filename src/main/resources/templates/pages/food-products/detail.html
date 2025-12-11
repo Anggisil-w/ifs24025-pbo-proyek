@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk - Food Quality Inspector</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.7s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans p-6">
+
+    <div class="max-w-7xl mx-auto animate-fade-in">
+        
+        <!-- Back Button -->
+        <a th:href="@{/food-products}" 
+           class="group inline-flex items-center gap-3 text-blue-600 hover:text-blue-700 mb-8 font-bold px-6 py-3 bg-white rounded-xl hover:shadow-xl transition-all hover:scale-105 border border-blue-100">
+            <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
+            Kembali ke Daftar
+        </a>
+
+        <!-- Alert Messages (Jika ada redirect flash attributes) -->
+        <div th:if="${success}" class="mb-6 p-4 rounded-xl bg-green-100 border border-green-200 text-green-700 flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-5 h-5"></i> <span th:text="${success}"></span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- LEFT COLUMN: Image & Actions -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-8 space-y-6">
+                    
+                    <!-- Image Card -->
+                    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+                        <div class="aspect-square relative group bg-gray-200">
+                            <img th:src="@{/food-products/image/{filename}(filename=${foodProduct.productImage})}"
+                                 alt="Product Image"
+                                 class="w-full h-full object-cover"
+                                 onerror="this.src='https://via.placeholder.com/400?text=No+Image'"/>
+                            
+                            <!-- Edit Image Button Overlay -->
+                            <a th:href="@{/food-products/edit-image/{id}(id=${foodProduct.id})}"
+                               class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white font-bold cursor-pointer">
+                                <div class="bg-white/20 backdrop-blur-md p-3 rounded-full">
+                                    <i data-lucide="camera" class="w-6 h-6"></i>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <!-- Status Banner (Dynamic Color) -->
+                        <div class="p-6">
+                            <!-- PASSED -->
+                            <div th:if="${foodProduct.inspectionStatus == 'PASSED'}"
+                                 class="flex items-center gap-3 px-6 py-4 rounded-2xl font-bold shadow-lg text-white bg-gradient-to-r from-green-500 to-emerald-500 justify-center">
+                                <i data-lucide="check-circle" class="w-6 h-6"></i>
+                                <span class="text-lg">PASSED</span>
+                            </div>
+                            <!-- REJECTED -->
+                            <div th:if="${foodProduct.inspectionStatus == 'REJECTED'}"
+                                 class="flex items-center gap-3 px-6 py-4 rounded-2xl font-bold shadow-lg text-white bg-gradient-to-r from-red-500 to-rose-500 justify-center">
+                                <i data-lucide="x-circle" class="w-6 h-6"></i>
+                                <span class="text-lg">REJECTED</span>
+                            </div>
+                            <!-- PENDING -->
+                            <div th:if="${foodProduct.inspectionStatus == 'PENDING'}"
+                                 class="flex items-center gap-3 px-6 py-4 rounded-2xl font-bold shadow-lg text-white bg-gradient-to-r from-yellow-500 to-amber-500 justify-center">
+                                <i data-lucide="alert-circle" class="w-6 h-6"></i>
+                                <span class="text-lg">PENDING</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-blue-600"></i>
+                            Quick Actions
+                        </h3>
+                        <div class="space-y-3">
+                            <!-- Tombol Edit -->
+                            <a th:href="@{/food-products/edit/{id}(id=${foodProduct.id})}"
+                               class="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:shadow-xl transition-all hover:scale-105 font-semibold">
+                                <i data-lucide="edit-2" class="w-5 h-5"></i>
+                                Edit Produk
+                            </a>
+                            
+                            <!-- Tombol Hapus (Menuju Halaman Konfirmasi Delete) -->
+                            <a th:href="@{/food-products/delete/{id}(id=${foodProduct.id})}"
+                               class="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-red-50 to-rose-50 text-red-600 border-2 border-red-200 rounded-xl hover:from-red-100 hover:to-rose-100 transition-all hover:scale-105 font-semibold">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                Hapus Produk
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Details Section -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Header Card -->
+                <div class="relative bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-500 text-white rounded-3xl shadow-2xl p-8 overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 pointer-events-none">
+                        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+                        <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-300 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <h1 class="text-4xl font-extrabold" th:text="${foodProduct.productName}">Nama Produk</h1>
+                                    <i data-lucide="award" class="w-8 h-8 text-yellow-300"></i>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="package" class="w-5 h-5 text-blue-200"></i>
+                                    <span class="text-xl text-blue-100 font-semibold">Batch: <span th:text="${foodProduct.batchCode}">CODE</span></span>
+                                </div>
+                                <div class="mt-2 text-blue-100 text-sm">
+                                    Kategori: <span class="font-bold" th:text="${foodProduct.category}">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Information Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tanggal Produksi -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
+                                <i data-lucide="calendar" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <div class="text-sm text-gray-600 font-semibold">Tanggal Produksi</div>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-800" 
+                             th:text="${foodProduct.productionDate != null ? #temporals.format(foodProduct.productionDate, 'dd MMMM yyyy') : '-'}">
+                        </div>
+                    </div>
+
+                    <!-- Tanggal Kadaluarsa -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-red-100 to-rose-100 rounded-xl flex items-center justify-center">
+                                <i data-lucide="clock" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <div class="text-sm text-gray-600 font-semibold">Tanggal Kedaluwarsa</div>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-800" 
+                             th:text="${foodProduct.expiryDate != null ? #temporals.format(foodProduct.expiryDate, 'dd MMMM yyyy') : '-'}">
+                        </div>
+                    </div>
+
+                    <!-- Kode Batch -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center">
+                                <i data-lucide="package" class="w-6 h-6 text-purple-600"></i>
+                            </div>
+                            <div class="text-sm text-gray-600 font-semibold">Kode Batch</div>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-800" th:text="${foodProduct.batchCode}"></div>
+                    </div>
+
+                    <!-- Created At -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center">
+                                <i data-lucide="clock" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <div class="text-sm text-gray-600 font-semibold">Didaftarkan Pada</div>
+                        </div>
+                        <div class="text-lg font-bold text-gray-800" 
+                             th:text="${#temporals.format(foodProduct.createdAt, 'dd MMMM yyyy HH:mm')}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes Card -->
+                <div th:if="${foodProduct.notes != null and !foodProduct.notes.isEmpty()}" 
+                     class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-6 h-6 text-blue-600"></i>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-gray-800">Catatan Inspeksi</h2>
+                    </div>
+                    <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border-2 border-blue-100">
+                        <p class="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg" th:text="${foodProduct.notes}"></p>
+                    </div>
+                </div>
+
+                <!-- Status Details Card (Switch Logic) -->
+                <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                    <h2 class="text-2xl font-extrabold text-gray-800 mb-6 flex items-center gap-3">
+                        <i data-lucide="award" class="w-7 h-7 text-blue-600"></i>
+                        Detail Status Inspeksi
+                    </h2>
+                    
+                    <div th:switch="${foodProduct.inspectionStatus}">
+                        
+                        <!-- Case PASSED -->
+                        <div th:case="'PASSED'" class="relative rounded-2xl p-8 border-4 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 overflow-hidden">
+                            <div class="absolute top-0 right-0 w-64 h-64 opacity-10">
+                                <i data-lucide="check-circle" class="w-full h-full text-green-600"></i>
+                            </div>
+                            <div class="relative z-10 flex items-start gap-4">
+                                <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br from-green-500 to-emerald-500 shadow-xl">
+                                    <i data-lucide="check-circle" class="w-8 h-8"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-extrabold text-green-900 text-2xl mb-2">Lulus Inspeksi ✓</div>
+                                    <div class="text-green-700 text-lg">Produk memenuhi semua standar kualitas yang ditetapkan dan siap untuk distribusi.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Case REJECTED -->
+                        <div th:case="'REJECTED'" class="relative rounded-2xl p-8 border-4 bg-gradient-to-br from-red-50 to-rose-50 border-red-200 overflow-hidden">
+                            <div class="absolute top-0 right-0 w-64 h-64 opacity-10">
+                                <i data-lucide="x-circle" class="w-full h-full text-red-600"></i>
+                            </div>
+                            <div class="relative z-10 flex items-start gap-4">
+                                <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br from-red-500 to-rose-500 shadow-xl">
+                                    <i data-lucide="x-circle" class="w-8 h-8"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-extrabold text-red-900 text-2xl mb-2">Ditolak ✗</div>
+                                    <div class="text-red-700 text-lg">Produk tidak memenuhi standar kualitas. Diperlukan perbaikan atau penghancuran produk.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Case PENDING (Default) -->
+                        <div th:case="*" class="relative rounded-2xl p-8 border-4 bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-200 overflow-hidden">
+                            <div class="absolute top-0 right-0 w-64 h-64 opacity-10">
+                                <i data-lucide="alert-circle" class="w-full h-full text-yellow-600"></i>
+                            </div>
+                            <div class="relative z-10 flex items-start gap-4">
+                                <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br from-yellow-500 to-amber-500 shadow-xl">
+                                    <i data-lucide="alert-circle" class="w-8 h-8"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-extrabold text-yellow-900 text-2xl mb-2">Menunggu Inspeksi ⏳</div>
+                                    <div class="text-yellow-700 text-lg">Produk sedang dalam proses inspeksi dan menunggu hasil analisis laboratorium.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Bottom Action Buttons (Mobile Friendly) -->
+                <div class="flex flex-col md:flex-row gap-4 pt-4">
+                    <a th:href="@{/food-products/edit/{id}(id=${foodProduct.id})}"
+                       class="flex-1 flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 text-white rounded-2xl hover:shadow-2xl transition-all font-bold text-lg hover:scale-105">
+                        <i data-lucide="edit-2" class="w-6 h-6"></i>
+                        Edit Produk
+                    </a>
+                    <a th:href="@{/food-products}"
+                       class="px-8 py-5 border-2 border-gray-300 text-gray-700 rounded-2xl hover:bg-gray-50 transition-all font-bold text-lg hover:scale-105 hover:shadow-xl text-center">
+                        Kembali
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

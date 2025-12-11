@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/base :: layout(~{::content}, ~{::scripts})}">
+<head>
+    <title>Home - Food Quality Control</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <!-- UBAH WARNA: Menggunakan gradasi Hijau/Teal (Emerald-Teal-Cyan) untuk kesan Higienis & Fresh -->
+        <div class="min-h-screen bg-gradient-to-br from-emerald-600 via-teal-500 to-cyan-500 relative overflow-hidden">
+            
+            <!-- Animated Background Blobs -->
+            <div class="absolute inset-0 opacity-20 pointer-events-none">
+                <div class="absolute top-20 left-10 w-72 h-72 bg-white rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+                <div class="absolute top-40 right-10 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+                <div class="absolute bottom-20 left-1/2 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav class="relative z-10 px-4 py-6">
+                <div class="max-w-7xl mx-auto flex items-center justify-between">
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
+                            <!-- Icon Utensils / Makanan -->
+                            <i class="fas fa-utensils text-2xl text-teal-600"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-white">Food Quality</span>
+                    </div>
+                    
+                    <!-- Auth Buttons (Top Right) -->
+                    <div class="flex items-center space-x-4">
+                        <a th:href="@{/auth/login}" 
+                           class="px-6 py-3 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition font-semibold shadow-lg hidden sm:inline-flex items-center">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Masuk
+                        </a>
+                        <a th:href="@{/auth/register}" 
+                           class="px-6 py-3 bg-teal-700 text-white rounded-lg hover:bg-teal-800 transition font-semibold shadow-lg flex items-center">
+                            <i class="fas fa-user-plus mr-2"></i> Daftar
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Hero Content -->
+            <div class="relative z-10 max-w-7xl mx-auto px-4 py-20 text-center">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 slide-up">
+                    Jaminan Kualitas <br> Pangan Terbaik
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-white mb-10 max-w-3xl mx-auto slide-up" style="animation-delay: 0.2s">
+                    Sistem manajemen digital untuk inspeksi produk, pelacakan batch, dan penjaminan standar mutu pangan yang efisien.
+                </p>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center slide-up" style="animation-delay: 0.4s">
+                    <!-- Tombol Utama: Mengarah ke Dashboard Produk -->
+                    <a th:href="@{/food-products}" 
+                       class="px-8 py-4 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition font-bold text-lg shadow-2xl flex items-center justify-center">
+                        <i class="fas fa-clipboard-check mr-2"></i> Mulai Inspeksi
+                    </a>
+                    
+                    <!-- Tombol Sekunder -->
+                    <a href="#features" 
+                       class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white hover:text-teal-600 transition font-bold text-lg flex items-center justify-center">
+                        <i class="fas fa-arrow-down mr-2"></i> Fitur Unggulan
+                    </a>
+                </div>
+
+                <!-- Feature Cards Grid (ID features untuk target scroll) -->
+                <div id="features" class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 pt-10">
+                    <!-- Feature 1: Monitoring -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-8 text-white slide-up hover:bg-opacity-20 transition duration-300" style="animation-delay: 0.6s">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
+                            <i class="fas fa-chart-pie text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Analisa Kualitas</h3>
+                        <p class="text-white text-opacity-90">
+                            Pantau rasio produk Lolos (Passed) dan Ditolak (Rejected) melalui statistik visual real-time.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2: Traceability -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-8 text-white slide-up hover:bg-opacity-20 transition duration-300" style="animation-delay: 0.8s">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
+                            <i class="fas fa-barcode text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Pelacakan Batch</h3>
+                        <p class="text-white text-opacity-90">
+                            Temukan riwayat inspeksi berdasarkan Kode Batch produksi dengan cepat dan akurat.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3: Digital Evidence -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-8 text-white slide-up hover:bg-opacity-20 transition duration-300" style="animation-delay: 1s">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
+                            <i class="fas fa-camera text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Bukti Digital</h3>
+                        <p class="text-white text-opacity-90">
+                            Simpan foto sampel produk sebagai bukti visual inspeksi untuk audit di masa depan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="relative z-10 text-center text-white/80 py-10 mt-10">
+                <p class="text-sm">&copy; 2024 Food Quality Control System. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Khusus Halaman Ini (Animasi Blobs) -->
+    <th:block th:fragment="scripts">
+        <style>
+            @keyframes blob {
+                0%, 100% { transform: translate(0, 0) scale(1); }
+                33% { transform: translate(30px, -50px) scale(1.1); }
+                66% { transform: translate(-20px, 20px) scale(0.9); }
+            }
+            .animate-blob {
+                animation: blob 7s infinite;
+            }
+            .animation-delay-2000 {
+                animation-delay: 2s;
+            }
+            .animation-delay-4000 {
+                animation-delay: 4s;
+            }
+            /* Animasi Slide Up untuk konten */
+            .slide-up {
+                animation: slideUp 0.8s ease-out forwards;
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            @keyframes slideUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+    </th:block>
+</body>
+</html>

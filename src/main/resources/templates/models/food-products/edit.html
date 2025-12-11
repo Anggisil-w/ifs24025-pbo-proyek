@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Produk - Food Quality Inspector</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                        <i data-lucide="package" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-white text-lg font-bold flex items-center gap-2">
+                            Food Quality Inspector 🎯
+                        </h1>
+                        <p class="text-blue-100 text-xs">Sistem Manajemen Inspeksi Pangan Modern</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a th:href="@{/food-products}" class="flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all text-sm font-medium">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                        Dashboard
+                    </a>
+                    <a th:href="@{/food-products/list}" class="flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all text-sm font-medium">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        Produk
+                    </a>
+                    <a th:href="@{/food-products/add}" class="flex items-center gap-2 px-5 py-2.5 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all shadow-lg text-sm font-medium">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        Tambah
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto px-6 py-8 animate-fade-in">
+        
+        <!-- Page Header -->
+        <div class="flex items-center gap-4 mb-8">
+            <a th:href="@{/food-products/{id}(id=${foodProductForm.id})}" class="p-3 hover:bg-white rounded-xl transition-colors">
+                <i data-lucide="arrow-left" class="w-6 h-6 text-blue-600"></i>
+            </a>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Edit Produk</h2>
+                <p class="text-gray-600">Perbarui informasi produk dan hasil inspeksi</p>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        <div th:if="${error}" class="mb-6 bg-red-50 border-2 border-red-200 rounded-2xl p-4 flex items-center gap-2">
+            <i data-lucide="alert-circle" class="w-5 h-5 text-red-600"></i>
+            <p class="text-red-700 font-medium" th:text="${error}"></p>
+        </div>
+
+        <!-- Form Start -->
+        <form th:action="@{/food-products/edit}" th:object="${foodProductForm}" method="post" enctype="multipart/form-data" 
+              class="bg-white rounded-2xl shadow-md p-8 space-y-6">
+            
+            <!-- Hidden ID Field (Crucial for Update) -->
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- Product Name -->
+            <div>
+                <label class="block text-gray-700 mb-2 font-medium">
+                    Nama Produk <span class="text-red-500">*</span>
+                </label>
+                <input type="text" th:field="*{productName}" required
+                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+            </div>
+
+            <!-- Batch Code -->
+            <div>
+                <label class="block text-gray-700 mb-2 font-medium">
+                    Kode Batch <span class="text-red-500">*</span>
+                </label>
+                <input type="text" th:field="*{batchCode}" required
+                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+            </div>
+
+            <!-- Category & Status -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">Kategori</label>
+                    <div class="relative">
+                        <select th:field="*{category}"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white appearance-none cursor-pointer">
+                            <option value="Makanan Ringan">Makanan Ringan</option>
+                            <option value="Minuman">Minuman</option>
+                            <option value="Bahan Baku">Bahan Baku</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">Status Inspeksi</label>
+                    <div class="relative">
+                        <select th:field="*{inspectionStatus}"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white appearance-none cursor-pointer">
+                            <option value="PENDING">Pending</option>
+                            <option value="PASSED">Lulus</option>
+                            <option value="REJECTED">Ditolak</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dates (Optional based on previous Entity Update) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">Tanggal Produksi</label>
+                    <input type="date" th:field="*{productionDate}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">Tanggal Kedaluwarsa</label>
+                    <input type="date" th:field="*{expiryDate}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+                </div>
+            </div>
+
+            <!-- Image Upload Section (Complex Logic) -->
+            <div>
+                <label class="block text-gray-700 mb-2 font-medium">Foto Sampel Produk</label>
+                
+                <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-blue-400 transition-colors bg-gray-50/50">
+                    
+                    <!-- 1. Kondisi: Ada Gambar Lama ATAU Preview Gambar Baru -->
+                    <div id="preview-section" class="space-y-4" 
+                         th:classappend="${foodProductForm.productImage == null} ? 'hidden'">
+                         
+                        <!-- Image Element (Src diisi dari Backend atau JS) -->
+                        <img id="image-display" 
+                             th:src="${foodProductForm.productImage != null} ? @{/food-products/image/{fn}(fn=${foodProductForm.productImage})} : ''" 
+                             alt="Preview" 
+                             class="max-h-64 mx-auto rounded-xl shadow-md" />
+                             
+                        <label for="imageFile" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 cursor-pointer transition-colors shadow-md">
+                            <i data-lucide="upload" class="w-5 h-5"></i>
+                            Ganti Foto
+                        </label>
+                    </div>
+
+                    <!-- 2. Kondisi: Belum ada gambar sama sekali -->
+                    <label id="upload-placeholder" for="imageFile" class="cursor-pointer block"
+                           th:classappend="${foodProductForm.productImage != null} ? 'hidden'">
+                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="upload" class="w-8 h-8 text-blue-500"></i>
+                        </div>
+                        <p class="text-gray-900 font-medium mb-1">Klik untuk upload foto</p>
+                        <p class="text-gray-500 text-sm">Format: JPG, PNG (Max 5MB)</p>
+                    </label>
+
+                    <!-- Hidden Input File -->
+                    <input type="file" id="imageFile" name="imageFile" accept="image/*" class="hidden" onchange="previewImage(this)" />
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div>
+                <label class="block text-gray-700 mb-2 font-medium">Catatan Inspeksi</label>
+                <textarea th:field="*{notes}" rows="4"
+                          class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          placeholder="Tambahkan catatan atau hasil observasi..."></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-4 pt-4 border-t border-gray-100">
+                <a th:href="@{/food-products/{id}(id=${foodProductForm.id})}" 
+                   class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors text-center font-semibold">
+                    Batal
+                </a>
+                <button type="submit" 
+                        class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30 font-semibold">
+                    <i data-lucide="save" class="w-5 h-5"></i>
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+
+        function previewImage(input) {
+            const previewSection = document.getElementById('preview-section');
+            const placeholder = document.getElementById('upload-placeholder');
+            const imageDisplay = document.getElementById('image-display');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    // Update source gambar dengan file baru
+                    imageDisplay.src = e.target.result;
+                    
+                    // Tampilkan section preview, sembunyikan placeholder
+                    previewSection.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
