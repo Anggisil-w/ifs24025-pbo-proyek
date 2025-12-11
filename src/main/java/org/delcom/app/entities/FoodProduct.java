@@ -173,24 +173,11 @@ public class FoodProduct {
 
     // ======= @PrePersist & @PreUpdate =======
     @PrePersist
-    public void onCreate() {
-        // 1. Generate ID jika kosong
-        if (this.id == null) {
-            this.id = UUID.randomUUID();
-        }
-
-        // 2. PERBAIKAN UTAMA:
-        // Ambil waktu 'sekarang' SEKALI SAJA agar nilai createdAt dan updatedAt PERSIS sama.
-        LocalDateTime now = LocalDateTime.now();
-
-        if (this.createdAt == null) {
-            this.createdAt = now;
-        }
-        if (this.updatedAt == null) {
-            this.updatedAt = now;
-        }
-    }
-
+    protected void onCreate() {
+    LocalDateTime now = LocalDateTime.now(); // Ambil waktu satu kali saja
+    this.createdAt = now;
+    this.updatedAt = now; // Gunakan variabel yang sama
+}
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
