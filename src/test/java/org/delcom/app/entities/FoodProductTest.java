@@ -1,5 +1,6 @@
 package org.delcom.app.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -9,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
-import java.time.LocalDate; // <--- Tambahkan ini
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -77,22 +77,28 @@ class FoodProductTest {
     // 3. Test Lifecycle Methods (@PrePersist - onCreate)
     // ==================================================================================
     @Test
-    @DisplayName("Test @PrePersist (onCreate) sets createdAt and updatedAt")
+    @DisplayName("Test @PrePersist (onCreate) sets ID and Time")
     void testPrePersist() {
         FoodProduct product = new FoodProduct();
 
-        // Sebelum onCreate dipanggil, waktu harus null
+        // Kondisi Awal: ID dan Waktu harus NULL
+        assertNull(product.getId(), "ID awal harus null");
         assertNull(product.getCreatedAt());
         assertNull(product.getUpdatedAt());
 
-        // Panggil method protected 'onCreate' menggunakan ReflectionTestUtils
+        // ACTION: Panggil method 'onCreate'
+        // Kita pakai ReflectionTestUtils karena method onCreate biasanya protected/private
         ReflectionTestUtils.invokeMethod(product, "onCreate");
 
-        // Setelah onCreate, waktu tidak boleh null
+        // VALIDASI:
+        // 1. ID harus ter-generate otomatis (sesuai logika Entity yang baru)
+        assertNotNull(product.getId(), "ID harus digenerate saat onCreate");
+        
+        // 2. Waktu harus terisi
         assertNotNull(product.getCreatedAt());
         assertNotNull(product.getUpdatedAt());
 
-        // createdAt dan updatedAt harus memiliki waktu yang (hampir) sama saat create
+        // 3. Waktu create dan update harus sama saat pertama kali dibuat
         assertEquals(product.getCreatedAt(), product.getUpdatedAt());
     }
 
@@ -125,6 +131,10 @@ class FoodProductTest {
         assertTrue(product.getUpdatedAt().isAfter(initialUpdatedTime));
         assertNotEquals(product.getCreatedAt(), product.getUpdatedAt());
     }
+
+    // ==================================================================================
+    // 5. Test Date Fields (Production & Expiry)
+    // ==================================================================================
     @Test
     @DisplayName("Test Date Fields (Production & Expiry)")
     void testDateFields() {
