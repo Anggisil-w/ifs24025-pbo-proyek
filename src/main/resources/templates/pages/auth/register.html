@@ -1,104 +1,295 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/base :: layout(~{::content}, ~{::scripts})}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register - Parking Manager</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEase - Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob { animation: blob 7s infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+        .hidden { display: none; }
+        .flex { display: flex; }
+    </style>
 </head>
-<body>
-    <div th:fragment="content">
-        <div class="min-h-screen bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 slide-up">
-                <!-- Logo & Title -->
-                <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
-                        <i class="fas fa-car text-3xl text-purple-600"></i>
+<body class="bg-gray-50 text-gray-900">
+
+    <div class="min-h-screen flex relative overflow-hidden">
+        <!-- Animated Background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700">
+            <div class="absolute inset-0 opacity-30">
+                <div class="absolute top-0 -left-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+                <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+                <div class="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+            </div>
+        </div>
+
+        <!-- Left Side (Desktop Only) -->
+        <div class="hidden lg:flex lg:w-1/2 relative z-10 flex-col justify-center items-center p-12 text-white">
+            <div class="max-w-md">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="relative">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-lg rounded-2xl flex items-center justify-center transform -rotate-6 shadow-lg">
+                            <i data-lucide="car" class="w-10 h-10 text-white"></i>
+                        </div>
                     </div>
-                    <h1 class="text-3xl font-bold text-gray-800">Daftar Akun</h1>
-                    <p class="text-gray-600 mt-2">Buat akun baru Anda</p>
+                    <div>
+                        <h1 class="text-white text-3xl font-bold">ParkEase</h1>
+                        <p class="text-blue-100">Smart Parking System</p>
+                    </div>
+                </div>
+                <h2 class="text-4xl font-bold mb-6 leading-tight">Bergabung dengan Ribuan Pengguna Kami</h2>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-xl p-4 transition hover:bg-white/20">
+                        <i data-lucide="check-circle" class="w-6 h-6 text-green-300 flex-shrink-0 mt-1"></i>
+                        <div><p class="text-white font-medium mb-1">Setup Cepat</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Register Form -->
+        <div class="w-full lg:w-1/2 relative z-10 flex items-center justify-center p-6 lg:p-12">
+            <div class="w-full max-w-md">
+                
+                <!-- Mobile Logo -->
+                <div class="lg:hidden text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-lg rounded-2xl mb-4 shadow-lg">
+                        <i data-lucide="car" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h1 class="text-white text-2xl font-bold mb-2">ParkEase</h1>
                 </div>
 
-                <!-- Error Messages -->
-                <div th:if="${#fields.hasErrors('registerForm.*')}" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg fade-in">
-                    <ul class="list-disc list-inside">
-                        <li th:each="err : ${#fields.errors('registerForm.*')}" th:text="${err}">Error message</li>
-                    </ul>
+                <!-- Register Card -->
+                <div class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Daftar Akun Baru ✨</h2>
+                        <p class="text-gray-600">Mulai perjalanan Anda dengan ParkEase</p>
+                    </div>
+
+                    <!-- THYMELEAF FORM -->
+                    <form id="registerForm" th:action="@{/auth/register/post}" th:object="${registerForm}" method="post" class="space-y-4" novalidate>
+                        
+                        <!-- Name Field -->
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i data-lucide="user" class="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors"></i>
+                                </div>
+                                <input id="name" type="text" th:field="*{name}"
+                                    class="w-full pl-12 pr-4 py-4 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
+                                    th:classappend="${#fields.hasErrors('name')} ? 'border-red-500' : 'border-gray-200'"
+                                    placeholder="John Doe">
+                            </div>
+                            <p id="error-name" class="mt-2 text-sm text-red-500 items-center gap-1"
+                               th:classappend="${#fields.hasErrors('name')} ? 'flex' : 'hidden'">
+                                <span>⚠️</span> 
+                                <span class="msg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                                <span class="msg" th:unless="${#fields.hasErrors('name')}"></span>
+                            </p>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i data-lucide="mail" class="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors"></i>
+                                </div>
+                                <input id="email" type="email" th:field="*{email}"
+                                    class="w-full pl-12 pr-4 py-4 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
+                                    th:classappend="${#fields.hasErrors('email')} ? 'border-red-500' : 'border-gray-200'"
+                                    placeholder="nama@email.com">
+                            </div>
+                            <p id="error-email" class="mt-2 text-sm text-red-500 items-center gap-1"
+                               th:classappend="${#fields.hasErrors('email')} ? 'flex' : 'hidden'">
+                                <span>⚠️</span> 
+                                <span class="msg" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                                <span class="msg" th:unless="${#fields.hasErrors('email')}"></span>
+                            </p>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i data-lucide="lock" class="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors"></i>
+                                </div>
+                                <input id="password" type="password" th:field="*{password}"
+                                    class="w-full pl-12 pr-14 py-4 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
+                                    th:classappend="${#fields.hasErrors('password')} ? 'border-red-500' : 'border-gray-200'"
+                                    placeholder="Minimal 6 karakter">
+                                <button type="button" onclick="togglePassword('password', 'eye-pass', 'eye-off-pass')" 
+                                    class="absolute inset-y-0 right-0 pr-4 flex items-center hover:scale-110 transition-transform outline-none">
+                                    <i id="eye-pass" data-lucide="eye" class="h-5 w-5 text-gray-400 hover:text-gray-600"></i>
+                                    <i id="eye-off-pass" data-lucide="eye-off" class="h-5 w-5 text-gray-400 hover:text-gray-600 hidden"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Password Strength Meter (JS Only) -->
+                            <div id="password-strength-container" class="mt-2 hidden">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-gray-600">Kekuatan Password</span>
+                                    <span id="strength-text" class="text-xs text-gray-600 font-medium">Lemah</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div id="strength-bar" class="bg-red-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <p id="error-password" class="mt-2 text-sm text-red-500 items-center gap-1"
+                               th:classappend="${#fields.hasErrors('password')} ? 'flex' : 'hidden'">
+                                <span>⚠️</span> 
+                                <span class="msg" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                                <span class="msg" th:unless="${#fields.hasErrors('password')}"></span>
+                            </p>
+                        </div>
+
+                        <!-- Confirm Password (Client-side check mainly) -->
+                        <div>
+                            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i data-lucide="lock" class="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors"></i>
+                                </div>
+                                <input id="confirmPassword" type="password" name="confirmPassword"
+                                    class="w-full pl-12 pr-14 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
+                                    placeholder="Ulangi password">
+                                <button type="button" onclick="togglePassword('confirmPassword', 'eye-conf', 'eye-off-conf')"
+                                    class="absolute inset-y-0 right-0 pr-4 flex items-center hover:scale-110 transition-transform outline-none">
+                                    <i id="eye-conf" data-lucide="eye" class="h-5 w-5 text-gray-400 hover:text-gray-600"></i>
+                                    <i id="eye-off-conf" data-lucide="eye-off" class="h-5 w-5 text-gray-400 hover:text-gray-600 hidden"></i>
+                                </button>
+                            </div>
+                            <p id="error-confirmPassword" class="mt-2 text-sm text-red-500 hidden items-center gap-1">
+                                <span>⚠️</span> <span class="msg">Error message</span>
+                            </p>
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="flex items-start pt-2">
+                            <input id="terms" type="checkbox" class="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer" required>
+                            <label for="terms" class="ml-2 text-sm text-gray-600">
+                                Saya setuju dengan <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline">syarat dan ketentuan</a> yang berlaku
+                            </label>
+                        </div>
+
+                        <button type="submit" class="group w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 transform hover:scale-[1.02]">
+                            <span class="font-semibold">Daftar Sekarang</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </form>
+
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+                        <div class="relative flex justify-center text-sm"><span class="px-4 bg-white text-gray-500">atau daftar dengan</span></div>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Sudah punya akun? 
+                            <a th:href="@{/auth/login}" class="text-blue-600 hover:text-blue-700 font-semibold">Masuk di sini</a>
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Register Form -->
-                <form th:action="@{/auth/register/post}" th:object="${registerForm}" method="post" class="space-y-6">
-                    <!-- Name -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-user mr-1"></i> Nama Lengkap
-                        </label>
-                        <input type="text" 
-                               th:field="*{name}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                               placeholder="John Doe"
-                               required>
-                    </div>
-
-                    <!-- Email -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-envelope mr-1"></i> Email
-                        </label>
-                        <input type="email" 
-                               th:field="*{email}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                               placeholder="nama@email.com"
-                               required>
-                    </div>
-
-                    <!-- Password -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-lock mr-1"></i> Kata Sandi
-                        </label>
-                        <input type="password" 
-                               th:field="*{password}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                               placeholder="••••••••"
-                               required>
-                        <p class="mt-1 text-xs text-gray-500">Minimal 6 karakter</p>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" 
-                            class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-200 shadow-lg hover:shadow-xl">
-                        <i class="fas fa-user-plus mr-2"></i> Daftar
-                    </button>
-                </form>
-
-                <!-- Login Link -->
-                <div class="mt-6 text-center">
-                    <p class="text-gray-600">
-                        Sudah punya akun? 
-                        <a th:href="@{/auth/login}" class="text-purple-600 hover:underline font-semibold">
-                            Masuk di sini
-                        </a>
-                    </p>
-                </div>
+                <p class="text-center text-white/80 text-sm mt-6 lg:text-gray-500">© 2024 ParkEase. All rights reserved.</p>
             </div>
         </div>
     </div>
 
-    <th:block th:fragment="scripts">
-        <script>
-            // Password strength indicator (optional)
-            const passwordInput = document.querySelector('input[type="password"]');
-            if (passwordInput) {
-                passwordInput.addEventListener('input', function() {
-                    const strength = this.value.length;
-                    if (strength < 6) {
-                        this.classList.add('border-red-500');
-                        this.classList.remove('border-green-500');
-                    } else {
-                        this.classList.add('border-green-500');
-                        this.classList.remove('border-red-500');
-                    }
-                });
+    <script>
+        lucide.createIcons();
+
+        function togglePassword(inputId, eyeId, eyeOffId) {
+            const input = document.getElementById(inputId);
+            const eye = document.getElementById(eyeId);
+            const eyeOff = document.getElementById(eyeOffId);
+            if (input.type === 'password') {
+                input.type = 'text'; eye.classList.add('hidden'); eyeOff.classList.remove('hidden');
+            } else {
+                input.type = 'password'; eye.classList.remove('hidden'); eyeOff.classList.add('hidden');
             }
-        </script>
-    </th:block>
+        }
+
+        // Strength Logic
+        const passInput = document.getElementById('password');
+        const strengthContainer = document.getElementById('password-strength-container');
+        const strengthBar = document.getElementById('strength-bar');
+        const strengthText = document.getElementById('strength-text');
+
+        passInput.addEventListener('input', function() {
+            const val = this.value;
+            if(val.length > 0) strengthContainer.classList.remove('hidden');
+            else { strengthContainer.classList.add('hidden'); return; }
+
+            let strength = 0; let color = 'bg-red-500'; let label = 'Lemah';
+            if (val.length < 6) { strength = 25; } 
+            else if (val.length < 8) { strength = 50; color = 'bg-yellow-500'; label = 'Sedang'; }
+            else if (val.length < 10) { strength = 75; color = 'bg-blue-500'; label = 'Kuat'; }
+            else { strength = 100; color = 'bg-green-500'; label = 'Sangat Kuat'; }
+
+            strengthBar.style.width = strength + '%';
+            strengthBar.className = `h-1.5 rounded-full transition-all duration-300 ${color}`;
+            strengthText.innerText = label;
+            strengthText.className = `text-xs font-medium ${strength > 50 ? 'text-green-600' : 'text-gray-600'}`;
+        });
+
+        // Form Validation Logic
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', function(e) {
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const terms = document.getElementById('terms');
+            let isValid = true;
+
+            const showError = (input, msg) => {
+                e.preventDefault();
+                input.classList.remove('border-gray-200');
+                input.classList.add('border-red-500');
+                const errDiv = document.getElementById(`error-${input.id}`);
+                errDiv.querySelector('.msg').innerText = msg;
+                errDiv.classList.remove('hidden');
+                errDiv.classList.add('flex');
+                isValid = false;
+            };
+
+            // Reset UI for fields without server errors
+            [name, email, password, confirmPassword].forEach(input => {
+                if(!input.classList.contains('border-red-500')) {
+                    input.classList.add('border-gray-200');
+                    const errDiv = document.getElementById(`error-${input.id}`);
+                    if(errDiv) { errDiv.classList.add('hidden'); errDiv.classList.remove('flex'); }
+                }
+            });
+
+            if (!name.value.trim()) showError(name, 'Nama harus diisi');
+            if (!email.value.trim()) showError(email, 'Email harus diisi');
+            if (!password.value) showError(password, 'Password harus diisi');
+            else if (password.value.length < 6) showError(password, 'Password minimal 6 karakter');
+
+            if (!confirmPassword.value) showError(confirmPassword, 'Konfirmasi password harus diisi');
+            else if (password.value !== confirmPassword.value) showError(confirmPassword, 'Password tidak cocok');
+
+            if (!terms.checked) {
+                e.preventDefault();
+                alert('Anda harus menyetujui syarat dan ketentuan');
+            }
+        });
+    </script>
 </body>
 </html>

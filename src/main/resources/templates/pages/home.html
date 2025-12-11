@@ -1,146 +1,170 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/base :: layout(~{::content}, ~{::scripts})}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home - Food Quality Control</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEase - Welcome</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --primary-blue: #0099ff; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111;
+            color: white;
+            margin: 0; padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=2670&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.95));
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative; z-index: 2;
+            flex-grow: 1;
+            display: flex; flex-direction: column;
+            justify-content: center;
+            padding-top: 80px;
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            position: absolute; top: 0; width: 100%; z-index: 10;
+            padding: 1.5rem 0; background: transparent;
+        }
+        .brand-text { font-weight: 700; font-size: 1.25rem; color: white; text-decoration: none; }
+        .logo-box {
+            width: 40px; height: 40px; background: var(--primary-blue);
+            color: white; border-radius: 8px; display: flex;
+            align-items: center; justify-content: center; margin-right: 10px; font-size: 20px;
+        }
+        .btn-masuk { color: #ccc; font-weight: 600; text-decoration: none; margin-right: 20px; transition: 0.3s; }
+        .btn-masuk:hover { color: white; }
+        .btn-daftar {
+            background-color: var(--primary-blue); color: white; border: none;
+            padding: 10px 24px; border-radius: 6px; font-weight: 600; text-decoration: none; transition: 0.3s;
+        }
+        .btn-daftar:hover { background-color: #007acc; color: white; }
+
+        /* CONTENT */
+        .badge-pill {
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2); padding: 6px 20px;
+            border-radius: 50px; font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 1px; text-transform: uppercase; color: #ccc;
+            display: inline-flex; align-items: center; margin-bottom: 2rem;
+        }
+        .dot-green {
+            height: 8px; width: 8px; background-color: #2ecc71;
+            border-radius: 50%; margin-right: 8px; box-shadow: 0 0 5px #2ecc71;
+        }
+        h1.hero-title { font-weight: 800; font-size: 4rem; margin-bottom: 1rem; letter-spacing: -1px; }
+        p.hero-desc { font-size: 1.15rem; color: #a0aec0; max-width: 700px; margin: 0 auto 3rem auto; line-height: 1.6; }
+        
+        .btn-cta {
+            background-color: var(--primary-blue); color: white;
+            font-size: 1.1rem; font-weight: 600; padding: 14px 40px;
+            border-radius: 50px; border: none; display: inline-flex;
+            align-items: center; gap: 10px; transition: transform 0.2s; text-decoration: none;
+        }
+        .btn-cta:hover { transform: translateY(-2px); background-color: #007acc; color: white; }
+
+        /* FEATURES */
+        .feature-box { display: flex; align-items: flex-start; gap: 15px; text-align: left; }
+        .icon-square {
+            width: 50px; height: 50px; min-width: 50px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+        }
+        .bg-icon-blue { background: rgba(0, 153, 255, 0.2); color: #0099ff; }
+        .bg-icon-yellow { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+        .bg-icon-green { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .feature-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.3rem; }
+        .feature-text { font-size: 0.9rem; color: #8899a6; line-height: 1.4; }
+
+        @media (max-width: 768px) { h1.hero-title { font-size: 2.5rem; } }
+    </style>
 </head>
 <body>
-    <div th:fragment="content">
-        <!-- Hero Section -->
-        <!-- UBAH WARNA: Menggunakan gradasi Hijau/Teal (Emerald-Teal-Cyan) untuk kesan Higienis & Fresh -->
-        <div class="min-h-screen bg-gradient-to-br from-emerald-600 via-teal-500 to-cyan-500 relative overflow-hidden">
-            
-            <!-- Animated Background Blobs -->
-            <div class="absolute inset-0 opacity-20 pointer-events-none">
-                <div class="absolute top-20 left-10 w-72 h-72 bg-white rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
-                <div class="absolute top-40 right-10 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
-                <div class="absolute bottom-20 left-1/2 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
-            </div>
-
-            <!-- Navigation Bar -->
-            <nav class="relative z-10 px-4 py-6">
-                <div class="max-w-7xl mx-auto flex items-center justify-between">
-                    <!-- Logo -->
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
-                            <!-- Icon Utensils / Makanan -->
-                            <i class="fas fa-utensils text-2xl text-teal-600"></i>
-                        </div>
-                        <span class="text-2xl font-bold text-white">Food Quality</span>
-                    </div>
-                    
-                    <!-- Auth Buttons (Top Right) -->
-                    <div class="flex items-center space-x-4">
-                        <a th:href="@{/auth/login}" 
-                           class="px-6 py-3 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition font-semibold shadow-lg hidden sm:inline-flex items-center">
-                            <i class="fas fa-sign-in-alt mr-2"></i> Masuk
-                        </a>
-                        <a th:href="@{/auth/register}" 
-                           class="px-6 py-3 bg-teal-700 text-white rounded-lg hover:bg-teal-800 transition font-semibold shadow-lg flex items-center">
-                            <i class="fas fa-user-plus mr-2"></i> Daftar
-                        </a>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- Hero Content -->
-            <div class="relative z-10 max-w-7xl mx-auto px-4 py-20 text-center">
-                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 slide-up">
-                    Jaminan Kualitas <br> Pangan Terbaik
-                </h1>
-                
-                <p class="text-xl md:text-2xl text-white mb-10 max-w-3xl mx-auto slide-up" style="animation-delay: 0.2s">
-                    Sistem manajemen digital untuk inspeksi produk, pelacakan batch, dan penjaminan standar mutu pangan yang efisien.
-                </p>
-                
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center slide-up" style="animation-delay: 0.4s">
-                    <!-- Tombol Utama: Mengarah ke Dashboard Produk -->
-                    <a th:href="@{/food-products}" 
-                       class="px-8 py-4 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition font-bold text-lg shadow-2xl flex items-center justify-center">
-                        <i class="fas fa-clipboard-check mr-2"></i> Mulai Inspeksi
-                    </a>
-                    
-                    <!-- Tombol Sekunder -->
-                    <a href="#features" 
-                       class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white hover:text-teal-600 transition font-bold text-lg flex items-center justify-center">
-                        <i class="fas fa-arrow-down mr-2"></i> Fitur Unggulan
-                    </a>
-                </div>
-
-                <!-- Feature Cards Grid (ID features untuk target scroll) -->
-                <div id="features" class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 pt-10">
-                    <!-- Feature 1: Monitoring -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-8 text-white slide-up hover:bg-opacity-20 transition duration-300" style="animation-delay: 0.6s">
-                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
-                            <i class="fas fa-chart-pie text-3xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-3">Analisa Kualitas</h3>
-                        <p class="text-white text-opacity-90">
-                            Pantau rasio produk Lolos (Passed) dan Ditolak (Rejected) melalui statistik visual real-time.
-                        </p>
-                    </div>
-
-                    <!-- Feature 2: Traceability -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-8 text-white slide-up hover:bg-opacity-20 transition duration-300" style="animation-delay: 0.8s">
-                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
-                            <i class="fas fa-barcode text-3xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-3">Pelacakan Batch</h3>
-                        <p class="text-white text-opacity-90">
-                            Temukan riwayat inspeksi berdasarkan Kode Batch produksi dengan cepat dan akurat.
-                        </p>
-                    </div>
-
-                    <!-- Feature 3: Digital Evidence -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-8 text-white slide-up hover:bg-opacity-20 transition duration-300" style="animation-delay: 1s">
-                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
-                            <i class="fas fa-camera text-3xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-3">Bukti Digital</h3>
-                        <p class="text-white text-opacity-90">
-                            Simpan foto sampel produk sebagai bukti visual inspeksi untuk audit di masa depan.
-                        </p>
-                    </div>
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        
+        <!-- Navbar -->
+        <nav class="navbar-custom">
+            <div class="container d-flex justify-content-between align-items-center">
+                <a href="/" class="d-flex align-items-center text-decoration-none">
+                    <div class="logo-box"><i class="fa-solid fa-square-parking"></i></div>
+                    <div class="brand-text">Park<span style="color: #60a5fa;">Ease</span></div>
+                </a>
+                <div class="d-flex align-items-center">
+                    <a th:href="@{/auth/login}" class="btn-masuk">Masuk</a>
+                    <a th:href="@{/auth/register}" class="btn-daftar">Daftar</a>
                 </div>
             </div>
+        </nav>
 
-            <!-- Footer -->
-            <div class="relative z-10 text-center text-white/80 py-10 mt-10">
-                <p class="text-sm">&copy; 2024 Food Quality Control System. All rights reserved.</p>
+        <!-- Main Content -->
+        <div class="hero-content">
+            <div class="container text-center">
+                <div class="badge-pill"><span class="dot-green"></span> SYSTEM ONLINE</div>
+                <h1 class="hero-title">Kelola Area Parkir</h1>
+                <p class="hero-desc">Solusi manajemen parkir modern untuk lahan terbuka. Integrasi monitoring real-time, tahan cuaca, dan analisis data kapasitas.</p>
+                
+                <!-- TOMBOL KE DASHBOARD -->
+                <a th:href="@{/parking-slots}" class="btn-cta">
+                    Mulai Sekarang <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Features -->
+            <div class="container pb-5 mt-auto">
+                <div class="row pt-5 border-top border-secondary border-opacity-25">
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-box">
+                            <div class="icon-square bg-icon-blue"><i class="fa-solid fa-map-location-dot"></i></div>
+                            <div>
+                                <div class="feature-title">Integrasi Peta</div>
+                                <div class="feature-text">Monitoring visual slot parkir secara real-time.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-box">
+                            <div class="icon-square bg-icon-yellow"><i class="fa-solid fa-cloud-sun"></i></div>
+                            <div>
+                                <div class="feature-title">Tahan Cuaca</div>
+                                <div class="feature-text">Siap beroperasi outdoor 24/7 di segala kondisi.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-box">
+                            <div class="icon-square bg-icon-green"><i class="fa-solid fa-chart-line"></i></div>
+                            <div>
+                                <div class="feature-title">Analitik Data</div>
+                                <div class="feature-text">Laporan statistik okupansi kendaraan lengkap.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Scripts Khusus Halaman Ini (Animasi Blobs) -->
-    <th:block th:fragment="scripts">
-        <style>
-            @keyframes blob {
-                0%, 100% { transform: translate(0, 0) scale(1); }
-                33% { transform: translate(30px, -50px) scale(1.1); }
-                66% { transform: translate(-20px, 20px) scale(0.9); }
-            }
-            .animate-blob {
-                animation: blob 7s infinite;
-            }
-            .animation-delay-2000 {
-                animation-delay: 2s;
-            }
-            .animation-delay-4000 {
-                animation-delay: 4s;
-            }
-            /* Animasi Slide Up untuk konten */
-            .slide-up {
-                animation: slideUp 0.8s ease-out forwards;
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            @keyframes slideUp {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        </style>
-    </th:block>
 </body>
 </html>

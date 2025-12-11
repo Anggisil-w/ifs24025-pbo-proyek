@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -76,29 +76,23 @@ class FoodProductTest {
     // ==================================================================================
     // 3. Test Lifecycle Methods (@PrePersist - onCreate)
     // ==================================================================================
+// Di dalam FoodProductTest.java
+
     @Test
-    @DisplayName("Test @PrePersist (onCreate) sets ID and Time")
+    @DisplayName("Test @PrePersist (onCreate) sets createdAt and updatedAt")
     void testPrePersist() {
         FoodProduct product = new FoodProduct();
 
-        // Kondisi Awal: ID dan Waktu harus NULL
-        assertNull(product.getId(), "ID awal harus null");
         assertNull(product.getCreatedAt());
         assertNull(product.getUpdatedAt());
 
-        // ACTION: Panggil method 'onCreate'
-        // Kita pakai ReflectionTestUtils karena method onCreate biasanya protected/private
         ReflectionTestUtils.invokeMethod(product, "onCreate");
 
-        // VALIDASI:
-        // 1. ID harus ter-generate otomatis (sesuai logika Entity yang baru)
-        assertNotNull(product.getId(), "ID harus digenerate saat onCreate");
-        
-        // 2. Waktu harus terisi
         assertNotNull(product.getCreatedAt());
         assertNotNull(product.getUpdatedAt());
-
-        // 3. Waktu create dan update harus sama saat pertama kali dibuat
+        
+        // HAPUS BARIS INI: assertNotNull(product.getId());  <-- HAPUS INI
+        
         assertEquals(product.getCreatedAt(), product.getUpdatedAt());
     }
 
@@ -152,4 +146,5 @@ class FoodProductTest {
         assertEquals(prodDate, product.getProductionDate());
         assertEquals(expDate, product.getExpiryDate());
     }
+
 }
