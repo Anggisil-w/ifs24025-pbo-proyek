@@ -8,8 +8,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lucide Icons (Hanya library ini yang butuh JS untuk render icon, 
-         logika aplikasi murni HTML) -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
@@ -53,7 +52,7 @@
         </div>
 
         <!-- Filter Form (Standard HTML GET) -->
-        <form th:action="@{/food-products}" method="get" class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+        <form th:action="@{/food-products/list}" method="get" class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                 
                 <!-- Search Input (Col 5) -->
@@ -82,7 +81,7 @@
                     </div>
                 </div>
 
-                <!-- Submit Button (Col 3) - Wajib ada karena tanpa JS -->
+                <!-- Submit Button (Col 3) -->
                 <div class="md:col-span-3">
                     <button type="submit" class="w-full py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-colors font-medium flex items-center justify-center gap-2">
                         <i data-lucide="list-filter" class="w-4 h-4"></i>
@@ -132,10 +131,10 @@
                          <span th:text="${product.inspectionStatus}">STATUS</span>
                     </div>
 
-                    <!-- Quick Actions Overlay (Pure CSS Hover) -->
+                    <!-- Quick Actions Overlay -->
                     <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
                         <a th:href="@{/food-products/{id}(id=${product.id})}"
-                           class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-xl">
+                           class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-xl cursor-pointer">
                             <i data-lucide="eye" class="w-6 h-6 text-blue-600"></i>
                         </a>
                     </div>
@@ -151,8 +150,8 @@
                                   th:text="${product.batchCode}">BATCH</span>
                         </div>
                         
-                        <!-- Safe Check Date -->
-                        <p class="text-sm text-gray-600" th:if="${#object.hasProperty(product, 'productionDate') and product.productionDate != null}">
+                        <!-- [PERBAIKAN] Menghapus #object.hasProperty dan langsung cek null -->
+                        <p class="text-sm text-gray-600" th:if="${product.productionDate != null}">
                             <span class="font-semibold">Produksi:</span> 
                             <span th:text="${#temporals.format(product.productionDate, 'dd MMM yyyy')}">Date</span>
                         </p>
@@ -174,8 +173,7 @@
                             <i data-lucide="edit-2" class="w-4 h-4"></i>
                         </a>
                         
-                        <!-- 3. Delete (Link to Confirmation Page) -->
-                        <!-- Ini kunci "Tanpa JS": Kita arahkan ke halaman delete.html -->
+                        <!-- 3. Delete -->
                         <a th:href="@{/food-products/delete/{id}(id=${product.id})}"
                            class="flex items-center justify-center px-4 py-3 bg-gradient-to-r from-red-50 to-rose-50 text-red-600 border border-red-200 rounded-xl transition-all font-semibold hover:from-red-100 hover:to-rose-100">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -186,7 +184,7 @@
         </div>
     </div>
 
-    <!-- Hanya untuk merender icon Lucide menjadi SVG -->
+    <!-- Script Icons -->
     <script>
         lucide.createIcons();
     </script>
